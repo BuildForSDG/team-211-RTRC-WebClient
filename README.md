@@ -1,12 +1,10 @@
 barebones setup for JavaScript / Node projects replace this with a one-liner phrase describing this project or app
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1cc3cd1b19c646958cbf26d17c0e1984)](https://app.codacy.com/gh/BuildForSDG/team-211-RTRC-WebClient?utm_source=github.com&utm_medium=referral&utm_content=BuildForSDG/team-211-RTRC-WebClient&utm_campaign=Badge_Grade_Settings)
-[![Codacy Badge](https://img.shields.io/badge/Code%20Quality-D-red)](https://img.shields.io/badge/Code%20Quality-D-red)
-
 
 ## About
 
-What is this project about. Ok to enrich here or the section above it with an image. 
+What is this project about. Ok to enrich here or the section above it with an image.
 
 Once this repo has been setup on Codacy by the TTL, replace the above badge with the actual one from the Codacy dashboard, and add the code coverage badge as well. This is mandatory
 
@@ -28,7 +26,7 @@ Talk about what problem this solves, what SDG(s) and SGD targets it addresses an
 
 Install `npm` or `yarn` if you dont have any of them already installed. We recommend Yarn though.
 
-After clonning the repo to your local machine and moving into the cloned folder, Run `yarn install` to get started by installing dependencies. 
+After clonning the repo to your local machine and moving into the cloned folder, Run `yarn install` to get started by installing dependencies.
 
 `src/index.js` is the entry to the project and source code should go into the `src` folder.
 
@@ -43,7 +41,7 @@ This starter uses [Parcel](https://parceljs.org/getting_started.html) as the bun
 - Run tests: `yarn test`
 - Run tests with test coverage info: `yarn test:cover`
 - Check the codebase for proper syntax and formatting compliance: `yarn lint`
-- Run your app in local dev mode: `yarn start`. This puts the bundled app in a `dist` folder, set up a local web server at localhost:1234, and continues to watch for your code changes which it syncs with the local server. This means if you loaded the app in a browser, it will auto-refresh as you code along. Feel free to use whatever bundler best meets your needs. Parcel was only added as a sample and for those looking for a simple but effective solution to the hassle of bundlers. 
+- Run your app in local dev mode: `yarn start`. This puts the bundled app in a `dist` folder, set up a local web server at localhost:1234, and continues to watch for your code changes which it syncs with the local server. This means if you loaded the app in a browser, it will auto-refresh as you code along. Feel free to use whatever bundler best meets your needs. Parcel was only added as a sample and for those looking for a simple but effective solution to the hassle of bundlers.
 
 ## Authors
 
@@ -66,4 +64,3 @@ It's powerful to always give credit.
 
 ## LICENSE
 MIT
-
