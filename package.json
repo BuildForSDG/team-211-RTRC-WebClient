@@ -1,49 +1,65 @@
 {
-  "name": "js-starter",
-  "version": "0.0.1",
-  "description": "A boilerplate for starting js code",
-  "keywords": [
-    "js-starter",
-    "boilerplate"
-  ],
-  "private": false,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "directories": {
-    "test": "__tests__"
-  },
+  "name": "react-material-dashboard",
+  "version": "0.2.0",
+  "private": true,
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cover": "jest --coverage",
-    "lint": "eslint \"src/**/*.js\"",
-    "start": "parcel ./src/index.html"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "author": {
-    "name": "Build For SDG",
-    "email": "buildforsdg@andela.com"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "homepage": "https://github.com/BuildForSDG/js-starter#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BuildForSDG/js-starter.git"
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
-  "bugs": {
-    "url": "https://github.com/BuildForSDG/js-starter/issues"
+  "dependencies": {
+    "@date-io/date-fns": "^1.3.7",
+    "@material-ui/core": "^4.0.0-beta.1",
+    "@material-ui/icons": "^4.0.0-beta.0",
+    "@material-ui/pickers": "^3.1.1",
+    "@material-ui/styles": "^4.0.0-beta.1",
+    "axios": "^0.19.0",
+    "bootstrap": "^4.3.1",
+    "chart.js": "^2.7.3",
+    "classnames": "^2.2.6",
+    "date-fns": "^2.0.0-alpha.35",
+    "env-cmd": "^10.0.1",
+    "history": "^4.7.2",
+    "moment": "^2.24.0",
+    "node-sass": "^4.11.0",
+    "prop-types": "^15.7.1",
+    "react": "^16.8.6",
+    "react-chartjs-2": "^2.7.4",
+    "react-csv": "^1.1.1",
+    "react-datepicker": "^2.7.0",
+    "react-dom": "^16.8.6",
+    "react-export-excel": "^0.5.3",
+    "react-perfect-scrollbar": "^1.4.4",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.1",
+    "react-toastify": "^5.3.1",
+    "recompose": "^0.30.0",
+    "redux": "^4.0.1",
+    "underscore": "^1.9.1",
+    "validate.js": "^0.12.0"
   },
-  "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "babel-jest": "^25.4.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2",
-    "jest": "^25.4.0",
-    "parcel-bundler": "^1.12.4"
-  },
-  "browserslist": [
-    "last 1 Chrome versions"
-  ]
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "prettier-eslint": "^8.8.2",
+    "prettier-eslint-cli": "^4.7.1"
+  }
 }
