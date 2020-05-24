@@ -13,7 +13,7 @@ import { Grid } from '@material-ui/core';
 import { Dashboard as DashboardLayout } from 'layouts';
 
 // Custom components
-import { UserSettings, Password } from './components';
+import { Account, Password } from './components';
 import { protectRoute } from 'config';
 import { connect } from 'react-redux';
 
@@ -30,33 +30,32 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    // hide playback button
-    this.props.showPlaybackButton({
-      type: 'SHOW_PLAYBACK_BUTTON',
-      payload: false
-    });
-    this.props.showOtherButtons({
-      type: 'SHOW_OTHER_BUTTONS',
-      payload: false
-    });
-    // end hide playback button
+    //
   }
 
   render() {
     const { classes } = this.props;
-    const { is_account_owner } = this.props;
 
     return (
       <DashboardLayout title="Settings">
         <div className={classes.root}>
-          <Grid container spacing={4}>
+          <Grid
+            container
+            spacing={4}
+          >
             <Grid md={1} />
-            {is_account_owner && (
-              <Grid item md={5} xs={12}>
-                <UserSettings />
-              </Grid>
-            )}
-            <Grid item md={5} xs={12}>
+            <Grid
+              item
+              md={5}
+              xs={12}
+            >
+              <Account />
+            </Grid>
+            <Grid
+              item
+              md={5}
+              xs={12}
+            >
               <Password />
             </Grid>
           </Grid>
@@ -72,22 +71,10 @@ Settings.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    is_account_owner: state.usersReducer.is_account_owner
+    is_collector: state.usersReducer.is_collector
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    showPlaybackButton: action =>
-      dispatch({ type: action.type, payload: action.payload }),
-    showOtherButtons: action =>
-      dispatch({ type: action.type, payload: action.payload })
-  };
-};
-
-const connectSettings = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Settings);
+const connectSettings = connect(mapStateToProps)(Settings);
 
 export default withStyles(styles)(connectSettings);

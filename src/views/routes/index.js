@@ -47,12 +47,12 @@ class Routes extends Component {
         <Route
           component={VehicleDetails}
           exact
-          path="/vehicles/:vehicle_id-:id"
+          path="/vehicles/:vehicle_id"
         />
         <Route
           component={VehicleUpdate}
           exact
-          path="/vehicles/:vehicle_id-:id/update"
+          path="/vehicles/:vehicle_id/update"
         />
 
         <Route

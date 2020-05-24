@@ -1,6 +1,7 @@
 /* eslint-disable */
 const initialState = {
   token: null,
+  id: null,
   username: null,
   email: null,
   name: null,

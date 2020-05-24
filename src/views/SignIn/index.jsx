@@ -94,6 +94,7 @@ class SignIn extends Component {
       .then(res => {
         // set user data.
         authUser.token = res.data.token;
+        authUser.id = res.data.user.pk;
         authUser.username = res.data.user.username;
         authUser.is_staff = res.data.user.is_staff;
         authUser.is_collector = res.data.user.is_collector;
@@ -297,12 +298,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const connectSignIn = connect(
-  null,
-  mapDispatchToProps
-)(SignIn);
+const connectSignIn = connect(null, mapDispatchToProps)(SignIn);
 
-export default compose(
-  withRouter,
-  withStyles(styles)
-)(connectSignIn);
+export default compose(withRouter, withStyles(styles))(connectSignIn);
