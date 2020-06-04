@@ -26,7 +26,7 @@ import {
   PeopleOutlined as PeopleIcon,
   // ShoppingBasketOutlined as ShoppingBasketIcon,
   // LockOpenOutlined as LockOpenIcon,
-  TextFields as TextFieldsIcon,
+  SignalWifi4BarLockTwoTone,
   DirectionsCar as DirectionsCarIcon,
   // ImageOutlined as ImageIcon,
   InfoOutlined as InfoIcon,
@@ -102,7 +102,7 @@ class Sidebar extends Component {
             />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             activeClassName={classes.activeListItem}
             className={classes.listItem}
             component={NavLink}
@@ -115,23 +115,55 @@ class Sidebar extends Component {
               classes={{ primary: classes.listItemText }}
               primary="Vehicles"
             />
-          </ListItem>
+          </ListItem> */}
 
           {is_staff && (
-            <ListItem
-              activeClassName={classes.activeListItem}
-              className={classes.listItem}
-              component={NavLink}
-              to="/users"
-            >
-              <ListItemIcon className={classes.listItemIcon}>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText
-                classes={{ primary: classes.listItemText }}
-                primary="Account Managers"
-              />
-            </ListItem>
+            <>
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/categories"
+              >
+                <ListItemIcon className={classes.listItemIcon}>
+                  <DirectionsCarIcon />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Vehicle Categories"
+                />
+              </ListItem>
+
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/collectors"
+              >
+                <ListItemIcon className={classes.listItemIcon}>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Toll Collectors"
+                />
+              </ListItem>
+
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/locations"
+              >
+                <ListItemIcon className={classes.listItemIcon}>
+                  <SignalWifi4BarLockTwoTone />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Toll Locations"
+                />
+              </ListItem>
+            </>
           )}
 
           <ListItem

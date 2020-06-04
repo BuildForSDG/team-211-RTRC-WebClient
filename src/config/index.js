@@ -25,23 +25,15 @@ export const transactionsUrl = baseUrl + 'transactions/';
 
 // project resources endpoints
 export const customUsersUrl = baseUrl + 'users/';
+export const idTypesUrl = baseUrl + 'admin/id-types/';
+export const collectorsUrl = baseUrl + 'admin/collectors/';
 export const managersUrl = customUsersUrl + 'managers/';
 export const getManagerUrl = customUsersUrl + 'get_manager/';
 export const deleteManagerUrl = customUsersUrl + 'delete_manager/';
 export const ownerSettingsUrl = customUsersUrl + 'get_owner_settings/';
 export const updateOwnerSettingsUrl = customUsersUrl + 'update_owner_settings/';
-export const vehiclesUrl = baseUrl + 'vehicles/';
-export const getVehicleUrl = vehiclesUrl + 'get_vehicle/';
-export const getOwnerVehiclesUrl = vehiclesUrl + 'get_owner_vehicles/';
-export const getOwnerVehicleUrl = vehiclesUrl + 'get_owner_vehicle/';
-export const updateIndividualVehicleSettingsUrl =
-  vehiclesUrl + 'update_vehicle_settings/';
-export const VehiclesSettingsUrl = baseUrl + 'vehicles_settings/';
-export const VehiclesSettingsCreateOrUpdateUrl =
-  VehiclesSettingsUrl + 'create_or_update/';
-export const getOwnerVehicleSettings =
-  VehiclesSettingsUrl + 'get_owner_vehicle_settngs/';
-export const servicesUrl = baseUrl + 'services/';
+export const vehiclesUrl = baseUrl + 'admin/vehicles/';
+export const categoriesUrl = baseUrl + 'admin/vehicle-categories/';
 
 export const getHeaders = () => {
   axios.defaults.xsrfCookieName = 'csrftoken';
@@ -50,6 +42,18 @@ export const getHeaders = () => {
   const authUser = JSON.parse(localStorage.getItem('authUser'));
   const headers = {
     'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + authUser.token
+  };
+  return headers;
+};
+
+export const getFormDataHeaders = () => {
+  axios.defaults.xsrfCookieName = 'csrftoken';
+  axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+  const authUser = JSON.parse(localStorage.getItem('authUser'));
+  const headers = {
+    'Content-Type': 'multipart/form-data',
     Authorization: 'Bearer ' + authUser.token
   };
   return headers;
@@ -77,7 +81,7 @@ export const protectAuthRoute = props => {
 
 export const protectOwnerRoute = props => {
   let authUser = JSON.parse(localStorage.getItem('authUser'));
-  if (!authUser.is_collector || !authUser.is_staff) {
+  if (!authUser.is_staff) {
     props.history.push('/');
   }
 };

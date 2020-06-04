@@ -1,27 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // Externals
 import classNames from 'classnames';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 
 // Material helpers
-import { withStyles, Grid } from '@material-ui/core';
-import {
-  ArrowForward as ArrowForwardIcon,
-  DeleteOutline as DeleteIcon
-} from '@material-ui/icons';
+import { withStyles } from '@material-ui/core';
 
 // Material components
 import {
   Button,
   CircularProgress,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody
 } from '@material-ui/core';
 
 // Shared components
@@ -36,18 +31,17 @@ import { Dashboard as DashboardLayout } from 'layouts';
 
 // Component styles
 import styles from './styles';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { errorToast, vehiclesUrl, getHeaders, protectRoute } from 'config';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import constants from 'store/constants';
 
 const Vehicles = props => {
-  const store = useSelector(store => store);
+  const vehicles = useSelector(state => state.vehiclesReducer.vehicles);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
-  const [limit, setLimit] = useState(10);
-  const [vehicles, setVehicles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { classes, className } = props;
 
   const retrieveVehicles = async () => {
     setIsLoading(true);
@@ -56,7 +50,7 @@ const Vehicles = props => {
       .get(vehiclesUrl, { headers: getHeaders() })
       .then(res => {
         setIsLoading(false);
-        setVehicles(res.data.results);
+        dispatch({ type: constants.SET_VEHICLES, payload: res.data.results });
       })
       .catch(err => {
         setIsLoading(false);
@@ -65,19 +59,16 @@ const Vehicles = props => {
   };
 
   useEffect(() => {
-    retrieveVehicles();
     protectRoute();
+    retrieveVehicles();
   }, []);
 
-  const handleRoute = vehicle_id => {
-    props.history.push(`/vehicles/${vehicle_id}`);
-  };
-
-  const { is_user, is_collector } = store;
-  const { classes, className } = props;
+  // const handleRoute = vehicle_id => {
+  //   props.history.push(`/vehicles/${vehicle_id}`);
+  // };
 
   const rootClassName = classNames(classes.root, className);
-  const showVehicles = !isLoading && vehicles.length > 0;
+  const showVehicles = !isLoading && vehicles.length;
 
   return (
     <DashboardLayout title="Vehicles">
@@ -111,67 +102,39 @@ const Vehicles = props => {
               </div>
             )}
             {showVehicles && (
-              <Grid
-                className={classes.root}
-                container
-                spacing={4}
-              >
-                {vehicles.map((vehicle, index) => (
-                  <Grid lg={4}>
-                    <Card className={classes.root}>
-                      <CardActionArea>
-                        <CardMedia
-                          className={classes.media}
-                          image="/images/qr-code.png"
-                          title={vehicle.registration_number}
-                        />
-                        <CardContent>
-                          <Typography
-                            component="h2"
-                            gutterBottom
-                            variant="h5"
-                          >
-                            {vehicle.registration_number}
-                          </Typography>
-                          <Typography
-                            color="textSecondary"
-                            component="p"
-                            variant="body2"
-                          >
-                            <p>
-                              <b>Model:</b> {vehicle.model}
-                            </p>
-                            <p>
-                              <b>Category:</b>{' '}
-                              {`${vehicle.category.name} | ${vehicle.category.toll_fee}`}
-                            </p>
-                            <p>
-                              <b>Chassis Number:</b> {vehicle.chassis_number}
-                            </p>
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                      <CardActions>
-                        {is_user && (
-                          <Button
-                            color="primary"
-                            size="small"
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        )}
-                        <Button
-                          color="primary"
-                          onClick={handleRoute.bind(vehicle.id)}
-                          size="small"
-                        >
-                          <ArrowForwardIcon />
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    <TableCell align="left">Registration #</TableCell>
+                    <TableCell align="left">Chassis #</TableCell>
+                    <TableCell align="left">Model</TableCell>
+                    <TableCell align="left">Category</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {vehicles.map((vehicle, index) => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={index}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell className={classes.customerCell}>
+                        <Link to={`/vehicles/${vehicle.id}`}>
+                          {vehicle.registration_number}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{vehicle.chassis_number}</TableCell>
+                      <TableCell>{vehicle.model}</TableCell>
+                      <TableCell>
+                        {vehicle.category.name} @ Ghc.
+                        {vehicle.category.toll_fee}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </PortletContent>
         </PerfectScrollbar>
@@ -184,24 +147,5 @@ Vehicles.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.object.isRequired
 };
-
-// const mapStateToProps = state => {
-//   return {
-//     vehicles: state.vehiclesReducer.vehicles,
-//     is_user: state.usersReducer.is_user,
-//     is_collector: state.usersReducer.is_collector
-//   };
-// };
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     setVehicles: action =>
-//       dispatch({ type: action.type, payload: action.payload }),
-//     setSettings: action =>
-//       dispatch({ type: action.type, payload: action.payload })
-//   };
-// };
-
-// const connectVehicles = connect(mapStateToProps, mapDispatchToProps)(Vehicles);
 
 export default withStyles(styles)(Vehicles);

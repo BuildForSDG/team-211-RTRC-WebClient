@@ -6,12 +6,19 @@ import Dashboard from '../Dashboard';
 import Vehicles from '../Vehicles';
 import VehicleForm from '../Vehicles/VehicleForm';
 import VehicleDetails from '../Vehicles/VehicleDetail';
-import VehicleUpdate from '../Vehicles/VehicleUpdate';
-import UsersList from '../Users';
-import UserDetail from '../Users/UserDetail';
-import UserForm from '../Users/UserForm';
-import UserUpdate from '../Users/UserUpdate';
-// import UserList from './views/UserList';
+
+import Categories from '../Categories';
+import CategoryDetail from '../Categories/CategoryDetail';
+import CategoryForm from '../Categories/CategoryForm';
+
+import Collectors from '../Collectors';
+import CollectorDetail from '../Collectors/Detail';
+import CollectorForm from '../Collectors/Form';
+
+import Locations from '../Locations';
+import LocationForm from '../Locations/Form';
+import LocationDetail from '../Locations/Detail';
+
 import Icons from '../Icons';
 import Account from '../Account';
 import Settings from '../Settings';
@@ -50,30 +57,49 @@ class Routes extends Component {
           path="/vehicles/:vehicle_id"
         />
         <Route
-          component={VehicleUpdate}
+          component={Categories}
           exact
-          path="/vehicles/:vehicle_id/update"
-        />
-
-        <Route
-          component={UsersList}
-          exact
-          path="/users"
+          path="/categories"
         />
         <Route
-          component={UserForm}
+          component={CategoryForm}
           exact
-          path="/users/add-new"
+          path="/categories/add-new"
         />
         <Route
-          component={UserDetail}
+          component={CategoryDetail}
           exact
-          path="/users/:username-:id"
+          path="/categories/:category_id"
         />
         <Route
-          component={UserUpdate}
+          component={Collectors}
           exact
-          path="/users/:username-:id/update"
+          path="/collectors"
+        />
+        <Route
+          component={CollectorForm}
+          exact
+          path="/collectors/add-new"
+        />
+        <Route
+          component={CollectorDetail}
+          exact
+          path="/collectors/:collector_id"
+        />
+        <Route
+          component={Locations}
+          exact
+          path="/locations"
+        />
+        <Route
+          component={LocationForm}
+          exact
+          path="/locations/add-new"
+        />
+        <Route
+          component={LocationDetail}
+          exact
+          path="/locations/:location_id"
         />
         <Route
           component={Icons}

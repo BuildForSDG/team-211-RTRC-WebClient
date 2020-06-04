@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
   vehiclesUrl,
-  getOwnerVehicleUrl,
   getHeaders,
   protectRoute,
   protectOwnerRoute,
@@ -68,62 +67,24 @@ class VehicleDetails extends Component {
   }
 
   componentDidMount() {
-    // hide playback button
-    this.props.showPlaybackButton({
-      type: 'SHOW_PLAYBACK_BUTTON',
-      payload: false
-    });
-    this.props.showOtherButtons({
-      type: 'SHOW_OTHER_BUTTONS',
-      payload: false
-    });
-    // end hide playback button
-
     this.signal = true;
 
     // this.setState({ isLoading: true });
-    const vehicle_id = this.props.match.params.id;
-    const authUser = JSON.parse(localStorage.getItem('authUser'));
+    const vehicle_id = this.props.match.params.vehicle_id;
 
-    if (authUser.is_account_manager) {
-      axios
-        .post(getOwnerVehicleUrl, { vehicle_id }, { headers: getHeaders() })
-        .then(res => {
-          this.setState({
-            isLoading: false,
-            vehicle: res.data,
-            showbuttons: true
-          });
-        })
-        .catch(err => {
-          this.setState({ isLoading: false });
-          errorToast(
-            toast,
-            'error retrieving vehicle, retry.',
-            err,
-            this.props
-          );
+    axios
+      .get(vehiclesUrl + vehicle_id + '/', { headers: getHeaders() })
+      .then(res => {
+        this.setState({
+          isLoading: false,
+          vehicle: res.data,
+          showbuttons: true
         });
-    } else if (authUser.is_account_owner) {
-      axios
-        .get(vehiclesUrl + vehicle_id + '/', { headers: getHeaders() })
-        .then(res => {
-          this.setState({
-            isLoading: false,
-            vehicle: res.data,
-            showbuttons: true
-          });
-        })
-        .catch(err => {
-          this.setState({ isLoading: false });
-          errorToast(
-            toast,
-            'error retrieving vehicle, retry.',
-            err,
-            this.props
-          );
-        });
-    }
+      })
+      .catch(err => {
+        this.setState({ isLoading: false });
+        errorToast(toast, 'error retrieving vehicle, retry.', err, this.props);
+      });
   }
 
   handleOpen = () => {
@@ -483,7 +444,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VehicleDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(VehicleDetails);
