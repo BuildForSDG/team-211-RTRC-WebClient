@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  categoriesUrl,
+  locationsUrl,
+  collectorsUrl,
   getHeaders,
   protectRoute,
   protectOwnerRoute,
@@ -16,7 +17,23 @@ import { toast } from 'react-toastify';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from 'layouts';
-import { Grid, TextField } from '@material-ui/core';
+import {
+  Grid,
+  TextField,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow
+} from '@material-ui/core';
+import {
+  Portlet,
+  PortletHeader,
+  PortletLabel,
+  PortletToolbar,
+  PortletContent
+} from 'components';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import IconButton from '@material-ui/core/IconButton';
 import { ArrowBack as ArrowBackIcon, Edit, Delete } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
@@ -30,31 +47,52 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-const CategoryDetail = props => {
+const LocationDetail = props => {
   const dispatch = useDispatch();
-  const category = useSelector(state => state.vehiclesReducer.category);
+  const location = useSelector(state => state.tollsReducer.location);
+  const collectors = useSelector(state => state.usersReducer.collectors);
   const [isLoading, setIsLoading] = useState(false);
+  const [locationCollectors, setLocationCollectors] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const [openAssignDialog, setOpenAssignDialog] = useState(false);
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
   const [name, setName] = useState('');
-  const [tollFee, setTollFee] = useState('');
+  const [address, setAddress] = useState('');
+  const [assignee, setAssignee] = useState({});
   const [serverErrors, setServerErrors] = useState([]);
 
-  const getCategories = async () => {
+  const getLocation = async () => {
     setIsLoading(true);
-    const category_id = props.match.params.category_id;
+    const location_id = props.match.params.location_id;
 
     await axios
-      .get(`${categoriesUrl}${category_id}/`, { headers: getHeaders() })
+      .get(`${locationsUrl}${location_id}/`, { headers: getHeaders() })
       .then(res => {
         setIsLoading(false);
-        dispatch({ type: constants.SET_CATEGORY, payload: res.data });
+        dispatch({ type: constants.SET_LOCATION, payload: res.data });
         setName(res.data.name);
-        setTollFee(res.data.toll_fee);
+        setAddress(res.data.address);
+        setLocationCollectors(res.data.collectors);
       })
       .catch(err => {
         setIsLoading(false);
-        errorToast(toast, 'error retrieving category, retry.', err, props);
+        errorToast(toast, 'error retrieving location, retry.', err, props);
+      });
+  };
+
+  const getCollectors = async () => {
+    setIsLoading(true);
+
+    await axios
+      .get(collectorsUrl, { headers: getHeaders() })
+      .then(res => {
+        setIsLoading(false);
+        dispatch({ type: constants.SET_COLLECTORS, payload: res.data.results });
+      })
+      .catch(err => {
+        setIsLoading(false);
+        errorToast(toast, 'error retrieving collectors, retry.', err, props);
       });
   };
 
@@ -62,21 +100,21 @@ const CategoryDetail = props => {
   const handleUpdate = e => {
     e.preventDefault();
     setIsLoading(true);
-    const payload = { name, toll_fee: tollFee };
+    const payload = { name, address };
 
     axios
-      .put(`${categoriesUrl}${category.id}/`, payload, {
+      .put(`${locationsUrl}${location.id}/`, payload, {
         headers: getHeaders()
       })
       .then(res => {
         setIsLoading(false);
-        dispatch({ type: constants.SET_CATEGORY, payload: res.data });
+        dispatch({ type: constants.SET_LOCATION, payload: res.data });
         setOpenUpdateDialog(false);
-        successToast(toast, 'Category updated Successfully!');
+        successToast(toast, 'location updated Successfully!');
       })
       .catch(err => {
         setIsLoading(false);
-        errorToast(toast, 'error updating category, retry.', err, props);
+        errorToast(toast, 'error updating location, retry.', err, props);
         setServerErrors(err.response.data);
       });
   };
@@ -88,65 +126,113 @@ const CategoryDetail = props => {
     setIsLoading(true);
 
     axios
-      .delete(`${categoriesUrl}${category.id}/`, { headers: getHeaders() })
+      .delete(`${locationsUrl}${location.id}/`, { headers: getHeaders() })
       .then(res => {
         setIsLoading(false);
-        successToast(toast, 'Category Deleted Successfully!');
-        props.history.push('/categories');
+        successToast(toast, 'Location Deleted Successfully!');
+        props.history.push('/locations');
       })
       .catch(err => {
         setIsLoading(false);
-        errorToast(toast, 'error deleting category, retry.', err, props);
+        errorToast(toast, 'error deleting location, retry.', err, props);
       });
   };
   // end delete
+
+  const handleAssign = async collector => {
+    setIsLoading(true);
+    const payload = { collector };
+    await axios
+      .put(`${locationsUrl}${location.id}/assign/`, payload, {
+        headers: getHeaders()
+      })
+      .then(res => {
+        setIsLoading(false);
+        setOpenAssignDialog(false);
+        successToast(toast, 'Collector Assigned Successfully!');
+        dispatch({ type: constants.SET_LOCATION, payload: res.data });
+        setLocationCollectors(res.data.collectors);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        setOpenAssignDialog(false);
+        errorToast(toast, 'error assigning collector, retry.', err, props);
+      });
+  };
+
+  const handleRemove = async () => {
+    setIsLoading(true);
+    const payload = { collector: assignee.id };
+    await axios
+      .put(`${locationsUrl}${location.id}/remove/`, payload, {
+        headers: getHeaders()
+      })
+      .then(res => {
+        setIsLoading(false);
+        successToast(toast, 'Collector Removed Successfully!');
+        setOpenRemoveDialog(false);
+        dispatch({ type: constants.SET_LOCATION, payload: res.data });
+        setLocationCollectors(res.data.collectors);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        setOpenRemoveDialog(false);
+        errorToast(toast, 'error removing collector, retry.', err, props);
+      });
+  };
 
   const handleName = e => {
     setName(e.target.value);
   };
 
-  const handleTollFee = e => {
-    setTollFee(e.target.value);
+  const handleAddress = e => {
+    setAddress(e.target.value);
+  };
+
+  const handleAssignee = id => {
+    const _collector = collectors.find(obj => obj.id === id);
+    setAssignee(_collector);
+    setOpenRemoveDialog(true);
   };
 
   useEffect(() => {
     protectRoute(props);
     protectOwnerRoute(props);
-    getCategories();
+    getLocation();
+    getCollectors();
   }, []);
 
-  const showCategory = category === {} ? false : true;
+  const showLocation = location === {} ? false : true;
 
   return (
-    <DashboardLayout title="Category">
-      {showCategory && (
+    <DashboardLayout title="Location">
+      {showLocation && (
         <Grid>
           <div className="row">
             <div className="col-md-8 offset-md-2 mt-5">
               <div className="card">
                 <div className="card-header">
-                  <b>Name: {category.name}</b>
+                  <b>Name: </b>
+                  {location.name}
                 </div>
                 <div className="card-body">
                   <div className="card-title">
-                    <b>Toll Fee: </b>
-                    Ghc. {category.toll_fee}
+                    <b>Address: </b>
+                    {location.address}
                   </div>
 
                   <div className="card-subtitle">
                     <b>Created: </b>
-                    {new Date(category.created_at).toDateString()}
+                    {new Date(location.created_at).toDateString()}
                   </div>
                   <div className="card-subtitle">
                     <b>Updated: </b>
-                    {new Date(category.updated_at).toDateString()}
+                    {new Date(location.updated_at).toDateString()}
                   </div>
 
                   <div className="row mt-3">
                     <div className="col-md-2">
-                      <Link
-                        to="/categories"
-                        className="btn btn-outline-primary">
+                      <Link to="/locations" className="btn btn-outline-primary">
                         <ArrowBackIcon /> Back
                       </Link>
                     </div>
@@ -167,11 +253,72 @@ const CategoryDetail = props => {
                         Delete
                       </button>
                     </div>
+
+                    <div className="col-md-4">
+                      <button
+                        type="button"
+                        className="btn btn-info"
+                        onClick={() => setOpenAssignDialog(true)}>
+                        Assign Collector
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <div className="mt-3">
+                <Portlet>
+                  <PortletHeader noDivider>
+                    <PortletLabel
+                      subtitle={`${locationCollectors.length} in total`}
+                      title="Collectors"
+                    />
+                  </PortletHeader>
+                  <PerfectScrollbar>
+                    <PortletContent noPadding>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell align="left">Username</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Phone</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {locationCollectors.map((collect, index) => (
+                            <TableRow hover key={collect.id}>
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>
+                                <Link to={`/collectors/${collect.id}`}>
+                                  {collect.username}
+                                </Link>
+                              </TableCell>
+                              <TableCell>{collect.email}</TableCell>
+                              <TableCell>{collect.phone}</TableCell>
+                              <TableCell>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  onClick={handleAssignee.bind(
+                                    this,
+                                    collect.id
+                                  )}>
+                                  Remove
+                                </button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </PortletContent>
+                  </PerfectScrollbar>
+                </Portlet>
+              </div>
             </div>
           </div>
+
+          {/* Delete Dialog */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
               <Dialog
@@ -187,7 +334,7 @@ const CategoryDetail = props => {
                       <div className="row">
                         <div className="col-md-8 offset-md-2">
                           <div className="text-danger">
-                            Delete {category.name} ?
+                            Delete {location.name} ?
                           </div>
                         </div>
                       </div>
@@ -220,7 +367,9 @@ const CategoryDetail = props => {
               </Dialog>
             </Grid>
           </MuiPickersUtilsProvider>
+          {/* End Delete Dialog */}
 
+          {/* Update Dialog */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
               <Dialog
@@ -228,7 +377,7 @@ const CategoryDetail = props => {
                 onClose={() => setOpenUpdateDialog(false)}
                 aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title" className="text-danger">
-                  Update Category
+                  Update Location
                 </DialogTitle>
                 <DialogContent>
                   <Grid>
@@ -251,16 +400,16 @@ const CategoryDetail = props => {
 
                       <TextField
                         className={''}
-                        label="Toll Fee"
+                        label="Address"
                         margin="dense"
                         required
                         variant="outlined"
-                        name="tollFee"
-                        onChange={handleTollFee}
-                        value={tollFee}
+                        name="address"
+                        onChange={handleAddress}
+                        value={address}
                       />
-                      {serverErrors.toll_fee &&
-                        serverErrors.toll_fee.map(error => (
+                      {serverErrors.address &&
+                        serverErrors.address.map(error => (
                           <div className="text-danger">{error}</div>
                         ))}
                     </Grid>
@@ -292,10 +441,133 @@ const CategoryDetail = props => {
               </Dialog>
             </Grid>
           </MuiPickersUtilsProvider>
+          {/* End Update Dialog */}
+
+          {/* Assign Dialog */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify="space-around">
+              <Dialog
+                open={openAssignDialog}
+                onClose={() => setOpenAssignDialog(false)}
+                aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title" className="text-danger">
+                  Assign Collector
+                </DialogTitle>
+                <DialogContent>
+                  <Grid>
+                    <Grid item lg={1} md={1} />
+                    <Grid item lg={10} md={10}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell align="left">Username</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Action</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {collectors.map((collect, index) => (
+                            <TableRow hover key={collect.id}>
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>
+                                <Link to={`/collectors/${collect.id}`}>
+                                  {collect.username}
+                                </Link>
+                              </TableCell>
+                              <TableCell>{collect.email}</TableCell>
+                              <TableCell>
+                                {isLoading ? (
+                                  <CircularProgress />
+                                ) : (
+                                  <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={handleAssign.bind(
+                                      this,
+                                      collect.id
+                                    )}>
+                                    Assign
+                                  </Button>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </Grid>
+                  </Grid>
+                </DialogContent>
+                <DialogActions>
+                  <Grid container spacing={4}>
+                    <Grid item xs={6}>
+                      <Button
+                        onClick={() => setOpenAssignDialog(false)}
+                        color="primary">
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+          </MuiPickersUtilsProvider>
+          {/* End Assign Dialog */}
+
+          {/* Remove Dialog */}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify="space-around">
+              <Dialog
+                open={openRemoveDialog}
+                onClose={() => setOpenRemoveDialog(false)}
+                aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title" className="text-danger">
+                  <span className="text-danger">Confirm Remove</span>
+                </DialogTitle>
+                <DialogContent>
+                  <Grid>
+                    <Grid item lg={8} md={8} xl={8} xs={10}>
+                      <div className="row">
+                        <div className="col-md-8 offset-md-2">
+                          <div className="text-danger">
+                            Remove {assignee.name} ?
+                          </div>
+                        </div>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </DialogContent>
+                <DialogActions>
+                  <Grid container spacing={4}>
+                    <Grid item xs={6}>
+                      <Button
+                        onClick={() => setOpenRemoveDialog(false)}
+                        color="primary">
+                        Cancel
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      {isLoading ? (
+                        <CircularProgress />
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={handleRemove}>
+                          Remove
+                        </button>
+                      )}
+                    </Grid>
+                  </Grid>
+                </DialogActions>
+              </Dialog>
+            </Grid>
+          </MuiPickersUtilsProvider>
+          {/* End Remove Dialog */}
         </Grid>
       )}
     </DashboardLayout>
   );
 };
 
-export default CategoryDetail;
+export default LocationDetail;

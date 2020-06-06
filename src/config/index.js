@@ -34,6 +34,7 @@ export const ownerSettingsUrl = customUsersUrl + 'get_owner_settings/';
 export const updateOwnerSettingsUrl = customUsersUrl + 'update_owner_settings/';
 export const vehiclesUrl = baseUrl + 'admin/vehicles/';
 export const categoriesUrl = baseUrl + 'admin/vehicle-categories/';
+export const locationsUrl = baseUrl + 'admin/toll-locations/';
 
 export const getHeaders = () => {
   axios.defaults.xsrfCookieName = 'csrftoken';

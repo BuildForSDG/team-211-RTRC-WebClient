@@ -33,8 +33,8 @@ import styles from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import {
-  getFormDataHeaders,
-  categoriesUrl,
+  locationsUrl,
+  getHeaders,
   protectRoute,
   protectOwnerRoute,
   errorToast,
@@ -44,10 +44,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import constants from 'store/constants';
 
-const CategoryForm = props => {
+const LocationForm = props => {
   const [name, setName] = useState('');
-  const [tollFee, setTollFee] = useState('');
-  const [image, setImage] = useState('');
+  const [address, setAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [serverErrors, setServerErrors] = useState([]);
 
@@ -56,50 +55,45 @@ const CategoryForm = props => {
     protectOwnerRoute(props);
   });
 
-  const handleChangeName = e => {
+  const handleName = e => {
     setName(e.target.value);
   };
 
-  const handleTollFeeChange = e => {
-    setTollFee(e.target.value);
+  const handleAddress = e => {
+    setAddress(e.target.value);
   };
 
-  const handleImageChange = e => {
-    console.log(e);
-    setImage(e.currentTarget.files[0]);
-  };
-
-  // create new vehicle
-  const createVehicle = e => {
+  // create new location
+  const createLocation = e => {
     e.preventDefault();
     setIsLoading(true);
 
-    let payload = new FormData();
-    payload.append('name', JSON.stringify(name));
-    payload.append('toll_fee', JSON.stringify(tollFee));
-    payload.append('image', image);
+    const payload = { name, address };
 
     axios
-      .post(categoriesUrl, payload, { headers: getFormDataHeaders() })
+      .post(locationsUrl, payload, { headers: getHeaders() })
       .then(res => {
         setIsLoading(false);
-        successToast(toast, 'Category Created!');
-        props.history.push('/categories');
+        successToast(toast, 'Location Created!');
+        props.history.push('/locations');
       })
       .catch(err => {
         setIsLoading(false);
-        errorToast(toast, 'error creating vehicle, retry.', err, props);
+        if (err.response) {
+          setServerErrors(err.response.data);
+        }
+        errorToast(toast, 'error creating location, retry.', err, props);
       });
     // end create request
   };
-  // end create new vehicle
+  // end create location
 
   const { className, classes } = props;
 
   const rootClassName = classNames(classes.root, className);
 
   return (
-    <DashboardLayout title="Vehicle Form">
+    <DashboardLayout title="Location Form">
       <div className={classes.root}>
         <Grid container spacing={4} className="mt-5">
           <Grid item lg={2} md={2} xl={2}>
@@ -108,7 +102,7 @@ const CategoryForm = props => {
           <Grid item lg={8} md={8} xl={8} xs={12}>
             <Portlet className={rootClassName}>
               <PortletContent>
-                <PortletLabel subtitle="" title="Add Category" />
+                <PortletLabel subtitle="" title="Add Location" />
                 <form autoComplete="off" noValidate>
                   <Grid container>
                     <Grid item md={3} />
@@ -120,7 +114,7 @@ const CategoryForm = props => {
                         required
                         variant="outlined"
                         name="name"
-                        onChange={handleChangeName}
+                        onChange={handleName}
                         value={name}
                       />
                       {serverErrors.name &&
@@ -130,33 +124,16 @@ const CategoryForm = props => {
 
                       <TextField
                         className={classes.textField}
-                        label="Toll Fee"
+                        label="Address"
                         margin="dense"
                         required
                         variant="outlined"
-                        name="tollFee"
-                        onChange={handleTollFeeChange}
-                        value={tollFee}
+                        name="address"
+                        onChange={handleAddress}
+                        value={address}
                       />
-                      {serverErrors.toll_fee &&
-                        serverErrors.toll_fee.map(error => (
-                          <div className="text-danger">{error}</div>
-                        ))}
-                      <label htmlFor="image">
-                        Image
-                        <input
-                          type="file"
-                          required
-                          name="image"
-                          id="image"
-                          className="form-control"
-                          onChange={e => handleImageChange(e)}
-                          value={image}
-                          accept="image/*"
-                        />
-                      </label>
-                      {serverErrors.name &&
-                        serverErrors.name.map(error => (
+                      {serverErrors.address &&
+                        serverErrors.address.map(error => (
                           <div className="text-danger">{error}</div>
                         ))}
                     </Grid>
@@ -165,7 +142,7 @@ const CategoryForm = props => {
                   <Grid container>
                     <Grid xs={3} />
                     <Grid item xs={3}>
-                      <Link to="/categories" title="Categories">
+                      <Link to="/locations" title="Locations">
                         <IconButton aria-label="Delete" size="small">
                           <ArrowBackIcon fontSize="inherit" />
                         </IconButton>
@@ -179,7 +156,7 @@ const CategoryForm = props => {
                         <Button
                           color="primary"
                           variant="contained"
-                          onClick={createVehicle}>
+                          onClick={createLocation}>
                           <SaveIcon /> Submit
                         </Button>
                       )}
@@ -195,9 +172,9 @@ const CategoryForm = props => {
   );
 };
 
-CategoryForm.propTypes = {
+LocationForm.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(CategoryForm);
+export default withStyles(styles)(LocationForm);

@@ -1,261 +1,387 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  customUsersUrl,
-  getManagerUrl,
-  deleteManagerUrl,
+  collectorsUrl,
+  idTypesUrl,
+  getHeaders,
   protectRoute,
   protectOwnerRoute,
-  getHeaders,
   errorToast,
   successToast
 } from 'config';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import constants from 'store/constants';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from 'layouts';
-import { Grid } from '@material-ui/core';
+import {
+  Grid,
+  TextField,
+  InputLabel,
+  Select,
+  MenuItem
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
+import { ArrowBack as ArrowBackIcon, Edit, Delete } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { CircularProgress } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-class VehicleDetails extends Component {
-  constructor(props) {
-    super(props);
+const CollectorDetail = props => {
+  const dispatch = useDispatch();
+  const collector = useSelector(state => state.usersReducer.collector);
+  const idTypes = useSelector(state => state.usersReducer.idTypes);
+  const [isLoading, setIsLoading] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [idNumber, setIdNumber] = useState('');
+  const [idType, setIdType] = useState('');
+  const [dummyIdTypeTitle, setDummyIdTypeTitle] = useState('');
+  const [serverErrors, setServerErrors] = useState([]);
 
-    this.signal = false;
+  const getCollector = async () => {
+    setIsLoading(true);
+    const collector_id = props.match.params.collector_id;
 
-    this.state = {
-      isLoading: false,
-      limit: 10,
-      manager: {},
-      open: false,
-      confirmDelete: false,
-      showbuttons: false
+    await axios
+      .get(`${collectorsUrl}${collector_id}/`, { headers: getHeaders() })
+      .then(res => {
+        setIsLoading(false);
+        dispatch({ type: constants.SET_COLLECTOR, payload: res.data });
+        setName(res.data.name);
+        setPhone(res.data.phone);
+        setIdNumber(res.data.national_id);
+        setIdType(res.data.national_id_type.id);
+        setDummyIdTypeTitle(res.data.national_id_type.title);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        errorToast(toast, 'error retrieving category, retry.', err, props);
+      });
+  };
+
+  const getIdTypes = async () => {
+    await axios
+      .get(idTypesUrl, { headers: getHeaders() })
+      .then(res => {
+        dispatch({ type: constants.SET_ID_TYPES, payload: res.data.results });
+      })
+      .catch(err => {
+        errorToast(toast, 'error fetching ID Types', err, props);
+      });
+  };
+
+  // update
+  const handleUpdate = e => {
+    e.preventDefault();
+    setIsLoading(true);
+    const payload = {
+      name,
+      national_id: idNumber,
+      national_id_type: idType,
+      phone
     };
 
-    this.handleClose = this.handleClose.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  componentDidMount() {
-    // hide playback button
-    this.props.showPlaybackButton({
-      type: 'SHOW_PLAYBACK_BUTTON',
-      payload: false
-    });
-    this.props.showOtherButtons({
-      type: 'SHOW_OTHER_BUTTONS',
-      payload: false
-    });
-    // end hide playback button
-
-    this.signal = true;
-
-    this.setState({ isLoading: true });
-    const manager_id = this.props.match.params.id;
     axios
-      .post(
-        getManagerUrl,
-        { manager_id: manager_id },
-        { headers: getHeaders() }
-      )
+      .put(`${collectorsUrl}${collector.id}/`, payload, {
+        headers: getHeaders()
+      })
       .then(res => {
-        this.setState({
-          isLoading: false,
-          manager: res.data,
-          showbuttons: true
-        });
+        setIsLoading(false);
+        dispatch({ type: constants.SET_COLLECTOR, payload: res.data });
+        setName(res.data.name);
+        setPhone(res.data.phone);
+        setIdNumber(res.data.national_id);
+        setIdType(res.data.national_id_type);
+        setDummyIdTypeTitle(res.data.national_id_type.title);
+        setOpenUpdateDialog(false);
+        successToast(toast, 'Collector updated Successfully!');
       })
       .catch(err => {
-        this.setState({ isLoading: false });
-        errorToast(toast, 'error retrieving manager, retry.', err, this.props);
+        setIsLoading(false);
+        errorToast(toast, 'error updating collector, retry.', err, props);
+        if (err.response) {
+          setServerErrors(err.response.data);
+        }
       });
-  }
-
-  componentWillMount() {
-    protectRoute(this.props);
-    protectOwnerRoute(this.props);
-  }
-
-  handleOpen = () => {
-    this.setState({ open: true });
   };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  // end update
 
   // delete
-  handleDelete() {
-    const { id } = this.state.manager;
-    this.setState({ isLoading: true });
+  const handleDelete = e => {
+    e.preventDefault();
+    setIsLoading(true);
 
     axios
-      .post(deleteManagerUrl, { manager_id: id }, { headers: getHeaders() })
+      .delete(`${collectorsUrl}${collector.id}/`, { headers: getHeaders() })
       .then(res => {
-        this.setState({ isLoading: false });
-        successToast(toast, 'Manager Deleted Successfully!');
-        this.props.history.push('/users');
+        setIsLoading(false);
+        successToast(toast, 'Collector Deleted Successfully!');
+        props.history.push('/collectors');
       })
       .catch(err => {
-        this.setState({ isLoading: false });
-        errorToast(toast, 'error deleting manager, retry.', err, this.props);
+        setIsLoading(false);
+        errorToast(toast, 'error deleting collector, retry.', err, props);
       });
-  }
+  };
   // end delete
 
-  render() {
-    const { manager, open, isLoading, showbuttons } = this.state;
+  const handleName = e => {
+    setName(e.target.value);
+  };
 
-    return (
-      <DashboardLayout title="Manager Detail">
+  const handlePhone = e => {
+    setPhone(e.target.value);
+  };
+
+  const handleIdNumber = e => {
+    setIdNumber(e.target.value);
+  };
+
+  const handleIdType = e => {
+    setIdType(e.target.value);
+  };
+
+  useEffect(() => {
+    protectRoute(props);
+    protectOwnerRoute(props);
+    getCollector();
+    getIdTypes();
+  }, []);
+
+  const showCollector = collector === {} ? false : true;
+
+  return (
+    <DashboardLayout title="Collector">
+      {showCollector && (
         <Grid>
           <div className="row">
             <div className="col-md-8 offset-md-2 mt-5">
               <div className="card">
                 <div className="card-header">
-                  <b>{manager.username}</b>
+                  <b>
+                    {collector.username} | {collector.email}{' '}
+                  </b>
                 </div>
                 <div className="card-body">
                   <div className="card-title">
-                    <b>Manager Email: </b>
-                    {manager.email}
+                    <b>Name: </b>
+                    {collector.name}
                   </div>
-                  <div className="card-subtitle">
-                    <b>Phone: </b>
-                    {manager.phone}
-                  </div>
-
-                  <div className="row mt-3">
-                    <div className="col-md-2">
-                      <Link to="/users">
-                        <IconButton aria-label="Delete" size="small">
-                          <ArrowBackIcon fontSize="inherit" />
-                        </IconButton>
-                      </Link>
+                  <div className="card-body">
+                    <div className="card-title">
+                      <b>Phone: </b>
+                      {collector.phone}
                     </div>
-                    <div className="col-md-4" />
-                    {/* <div className="col-md-3">
-                      <Link
-                        to={
-                          '/users/' +
-                          manager.username +
-                          '-' +
-                          manager.id +
-                          '/update'
-                        }
-                        className="btn btn-primary">
-                        {'Update Manager'}
-                      </Link>
-                    </div> */}
-                    {showbuttons && (
-                      <div className="col-md-3">
+
+                    <div className="card-subtitle">
+                      <b>National ID Number: </b>
+                      {collector.national_id}
+                    </div>
+                    <div className="card-subtitle">
+                      <b>National ID Type: </b>
+                      {dummyIdTypeTitle}
+                    </div>
+
+                    <div className="row mt-3">
+                      <div className="col-md-2">
+                        <Link
+                          to="/collectors"
+                          className="btn btn-outline-primary">
+                          <ArrowBackIcon /> Back
+                        </Link>
+                      </div>
+                      <div className="col-md-2">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => setOpenUpdateDialog(true)}>
+                          Update
+                        </button>
+                      </div>
+
+                      <div className="col-md-2">
                         <button
                           type="button"
                           className="btn btn-danger"
-                          onClick={this.handleOpen}>
-                          {'Delete Manager'}
+                          onClick={() => setOpenDeleteDialog(true)}>
+                          Delete
                         </button>
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container justify="space-around">
-              <Dialog
-                open={open}
-                onClose={this.handleClose}
-                aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title" className="text-danger">
-                  Confirm Delete
-                </DialogTitle>
-                <DialogContent>
-                  <Grid>
-                    <Grid item lg={12} md={12} xl={12} xs={12}>
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div className="card">
-                            <div className="card-header text-danger">
-                              Delete {manager.username} ?
+
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-around">
+                <Dialog
+                  open={openDeleteDialog}
+                  onClose={() => setOpenDeleteDialog(false)}
+                  aria-labelledby="form-dialog-title">
+                  <DialogTitle id="form-dialog-title" className="text-danger">
+                    <span className="text-danger">Confirm Delete</span>
+                  </DialogTitle>
+                  <DialogContent>
+                    <Grid>
+                      <Grid item lg={8} md={8} xl={8} xs={10}>
+                        <div className="row">
+                          <div className="col-md-8 offset-md-2">
+                            <div className="text-danger">
+                              Delete {collector.name} ?
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </DialogContent>
-                <DialogActions>
-                  <Grid container spacing={4}>
-                    <Grid item xs={6}>
-                      <Button onClick={this.handleClose} color="primary">
-                        Cancel
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                      {isLoading ? (
-                        <CircularProgress />
-                      ) : (
+                  </DialogContent>
+                  <DialogActions>
+                    <Grid container spacing={4}>
+                      <Grid item xs={6}>
                         <Button
-                          color="red"
-                          variant="contained"
-                          onClick={this.handleDelete}>
-                          DELETE
+                          onClick={() => setOpenDeleteDialog(false)}
+                          color="primary">
+                          Cancel
                         </Button>
-                      )}
+                      </Grid>
+                      <Grid item xs={6}>
+                        {isLoading ? (
+                          <CircularProgress />
+                        ) : (
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={handleDelete}>
+                            Delete
+                          </button>
+                        )}
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </DialogActions>
-              </Dialog>
-            </Grid>
-          </MuiPickersUtilsProvider>
+                  </DialogActions>
+                </Dialog>
+              </Grid>
+            </MuiPickersUtilsProvider>
+
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-around">
+                <Dialog
+                  open={openUpdateDialog}
+                  onClose={() => setOpenUpdateDialog(false)}
+                  aria-labelledby="form-dialog-title">
+                  <DialogTitle id="form-dialog-title" className="text-danger">
+                    Update Collector
+                  </DialogTitle>
+                  <DialogContent>
+                    <Grid>
+                      <Grid item lg={2} md={2} />
+                      <Grid item lg={8} md={8}>
+                        <TextField
+                          className={''}
+                          label="Name"
+                          margin="dense"
+                          required
+                          variant="outlined"
+                          name="name"
+                          onChange={handleName}
+                          value={name}
+                        />
+                        {serverErrors.name &&
+                          serverErrors.name.map(error => (
+                            <div className="text-danger">{error}</div>
+                          ))}
+
+                        <TextField
+                          className={''}
+                          label="Phone"
+                          margin="dense"
+                          required
+                          variant="outlined"
+                          name="phone"
+                          onChange={handlePhone}
+                          value={phone}
+                        />
+                        {serverErrors.phone &&
+                          serverErrors.phone.map(error => (
+                            <div className="text-danger">{error}</div>
+                          ))}
+
+                        <TextField
+                          className={''}
+                          label="National ID Number"
+                          margin="dense"
+                          required
+                          variant="outlined"
+                          name="idNumber"
+                          onChange={handleIdNumber}
+                          value={idNumber}
+                        />
+                        {serverErrors.national_id &&
+                          serverErrors.national_id.map(error => (
+                            <div className="text-danger">{error}</div>
+                          ))}
+
+                        <InputLabel id="national-id-type">ID Type</InputLabel>
+                        <Select
+                          labelId="national-id-type"
+                          value={idType}
+                          onChange={handleIdType}>
+                          {idTypes.map(idtype => (
+                            <MenuItem value={idtype.id} key={idtype.id}>
+                              {idtype.title}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {serverErrors.national_id_type &&
+                          serverErrors.national_id_type.map(error => (
+                            <div className="text-danger">{error}</div>
+                          ))}
+                      </Grid>
+                    </Grid>
+                  </DialogContent>
+                  <DialogActions>
+                    <Grid container spacing={4}>
+                      <Grid item xs={6}>
+                        <Button
+                          onClick={() => setOpenUpdateDialog(false)}
+                          color="primary">
+                          Cancel
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        {isLoading ? (
+                          <CircularProgress />
+                        ) : (
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={handleUpdate}>
+                            Update
+                          </Button>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </DialogActions>
+                </Dialog>
+              </Grid>
+            </MuiPickersUtilsProvider>
+          </div>
         </Grid>
-      </DashboardLayout>
-    );
-  }
-}
-
-const mapStateToProps = state => {
-  return {
-    vehicles: state.vehiclesReducer.vehicles,
-    // playback state
-    open_playback_dialog: state.mapsReducer.open_playback_dialog
-  };
+      )}
+    </DashboardLayout>
+  );
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    showPlaybackButton: action =>
-      dispatch({ type: action.type, payload: action.payload }),
-    showOtherButtons: action =>
-      dispatch({ type: action.type, payload: action.payload }),
-    openPlaybackDialog: action =>
-      dispatch({ type: action.type, payload: action.payload })
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VehicleDetails);
+export default CollectorDetail;
