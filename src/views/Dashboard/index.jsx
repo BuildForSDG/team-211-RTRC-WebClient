@@ -13,7 +13,6 @@ import { Grid } from '@material-ui/core';
 import { Dashboard as DashboardLayout } from 'layouts';
 
 // Custom components
-import { SalesChart } from './components';
 import { Count, Money } from './components';
 
 import {

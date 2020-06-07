@@ -20,7 +20,7 @@ export const refreshTokenUrl = baseAuth + 'refresh-token/';
 export const usersUrl = baseUrl + 'admin/users/';
 
 export const walletUrl = baseUrl + 'wallet/';
-export const depositsUrl = baseUrl + 'deposits/';
+export const depositsUrl = baseUrl + 'admin/deposits/';
 export const transactionsUrl = baseUrl + 'transactions/';
 
 // project resources endpoints
