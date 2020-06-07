@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 
 // Material icons
-import { AttachMoney as AttachMoneyIcon } from '@material-ui/icons';
+import { ArrowUpward as NumberIcon } from '@material-ui/icons';
 
 // Shared components
 import { Paper } from 'components';
@@ -22,31 +22,23 @@ import styles from './styles';
 class Profit extends Component {
   render() {
     const { classes, className, ...rest } = this.props;
+    const { title, data } = this.props;
 
     const rootClassName = classNames(classes.root, className);
 
     return (
-      <Paper
-        {...rest}
-        className={rootClassName}
-      >
+      <Paper {...rest} className={rootClassName}>
         <div className={classes.content}>
           <div className={classes.details}>
-            <Typography
-              className={classes.title}
-              variant="body2"
-            >
-              TOTAL PROFIT
+            <Typography className={classes.title} variant="body2">
+              {title}
             </Typography>
-            <Typography
-              className={classes.value}
-              variant="h3"
-            >
-              $23,200
+            <Typography className={classes.value} variant="h3">
+              {data}
             </Typography>
           </div>
           <div className={classes.iconWrapper}>
-            <AttachMoneyIcon className={classes.icon} />
+            <NumberIcon className={classes.icon} />
           </div>
         </div>
       </Paper>

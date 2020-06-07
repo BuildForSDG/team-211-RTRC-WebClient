@@ -17,7 +17,7 @@ export const passwordResetUrl = baseAuth + 'password/reset/';
 export const passwordResetConfirmUrl = baseAuth + 'password/reset/confirm/';
 export const passwordChangeUrl = baseAuth + 'password/change/';
 export const refreshTokenUrl = baseAuth + 'refresh-token/';
-export const userUrl = baseAuth + 'users/';
+export const usersUrl = baseUrl + 'admin/users/';
 
 export const walletUrl = baseUrl + 'wallet/';
 export const depositsUrl = baseUrl + 'deposits/';

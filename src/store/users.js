@@ -11,7 +11,8 @@ const initialState = {
   is_staff: null,
   collectors: [],
   collector: {},
-  idTypes: []
+  idTypes: [],
+  statistics: {}
 };
 
 const usersReducer = (state = initialState, action) => {
@@ -79,6 +80,20 @@ const usersReducer = (state = initialState, action) => {
       return {
         ...state,
         idTypes: []
+      };
+    }
+
+    case constants.SET_STATISTICS: {
+      return {
+        ...state,
+        statistics: action.payload
+      };
+    }
+
+    case constants.REMOVE_STATISTICS: {
+      return {
+        ...state,
+        statistics: {}
       };
     }
 
