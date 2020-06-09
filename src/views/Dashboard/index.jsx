@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 // Externals
 import PropTypes from 'prop-types';
@@ -15,13 +15,7 @@ import { Dashboard as DashboardLayout } from 'layouts';
 // Custom components
 import { Count, Money } from './components';
 
-import {
-  protectRoute,
-  usersUrl,
-  getHeaders,
-  errorToast,
-  successToast
-} from 'config';
+import { protectRoute, usersUrl, getHeaders, errorToast } from 'config';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -67,6 +61,10 @@ const Dashboard = props => {
     getStatistics();
   }, []);
 
+  const navigate = route => {
+    props.history.push(route);
+  };
+
   const { classes } = props;
 
   return (
@@ -76,29 +74,61 @@ const Dashboard = props => {
             <SalesChart />
           </Grid> */}
         <Grid item lg={3} md={3} xl={3}>
-          <Money title="Total Wallet" data={statistics.total_wallet} />
+          <Money
+            title="Total Wallet"
+            data={statistics.total_wallet}
+            onClick={navigate.bind(this, '/wallet')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Money title="Total Deposits" data={statistics.total_deposits} />
+          <Money
+            title="Total Deposits"
+            data={statistics.total_deposits}
+            onClick={navigate.bind(this, '/deposits')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Money title="Total Payments" data={statistics.total_transactions} />
+          <Money
+            title="Total Payments"
+            data={statistics.total_transactions}
+            onClick={navigate.bind(this, '/transactions')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Count title="Total Locations" data={statistics.total_locations} />
+          <Count
+            title="Total Locations"
+            data={statistics.total_locations}
+            onClick={navigate.bind(this, '/locations')}
+          />
         </Grid>
 
         <Grid item lg={3} md={3} xl={3}>
-          <Count title="Total Vehicles" data={statistics.total_vehicles} />
+          <Count
+            title="Total Vehicles"
+            data={statistics.total_vehicles}
+            onClick={navigate.bind(this, '/vehicles')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Count title="Total Categories" data={statistics.total_categories} />
+          <Count
+            title="Total Categories"
+            data={statistics.total_categories}
+            onClick={navigate.bind(this, '/categories')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Count title="Total Drivers" data={statistics.total_drivers} />
+          <Count
+            title="Total Driver Accounts"
+            data={statistics.total_drivers}
+            onClick={navigate.bind(this, '/drivers')}
+          />
         </Grid>
         <Grid item lg={3} md={3} xl={3}>
-          <Count title="Total Collectors" data={statistics.total_collectors} />
+          <Count
+            title="Total Collectors"
+            data={statistics.total_collectors}
+            onClick={navigate.bind(this, '/collectors')}
+          />
         </Grid>
       </Grid>
     </DashboardLayout>

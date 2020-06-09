@@ -56,17 +56,22 @@ const CategoryForm = props => {
     protectOwnerRoute(props);
   });
 
-  const handleChangeName = e => {
+  const handleName = e => {
     setName(e.target.value);
   };
 
-  const handleTollFeeChange = e => {
+  const handleTollFee = e => {
     setTollFee(e.target.value);
   };
 
-  const handleImageChange = e => {
-    console.log(e);
-    setImage(e.currentTarget.files[0]);
+  const handleImage = e => {
+    const file = e.target.files[0];
+    // this.profile_picture = URL.createObjectURL(file);
+    // this.image_file = file;
+
+    const form_data = new FormData();
+    form_data.append('image', file);
+    setImage(form_data);
   };
 
   // create new vehicle
@@ -89,6 +94,9 @@ const CategoryForm = props => {
       .catch(err => {
         setIsLoading(false);
         errorToast(toast, 'error creating vehicle, retry.', err, props);
+        if (err.response) {
+          setServerErrors(err.response.data);
+        }
       });
     // end create request
   };
@@ -120,7 +128,7 @@ const CategoryForm = props => {
                         required
                         variant="outlined"
                         name="name"
-                        onChange={handleChangeName}
+                        onChange={handleName}
                         value={name}
                       />
                       {serverErrors.name &&
@@ -135,35 +143,37 @@ const CategoryForm = props => {
                         required
                         variant="outlined"
                         name="tollFee"
-                        onChange={handleTollFeeChange}
+                        onChange={handleTollFee}
                         value={tollFee}
                       />
                       {serverErrors.toll_fee &&
                         serverErrors.toll_fee.map(error => (
                           <div className="text-danger">{error}</div>
                         ))}
-                      <label htmlFor="image">
-                        Image
-                        <input
-                          type="file"
-                          required
-                          name="image"
-                          id="image"
-                          className="form-control"
-                          onChange={e => handleImageChange(e)}
-                          value={image}
-                          accept="image/*"
-                        />
-                      </label>
-                      {serverErrors.name &&
-                        serverErrors.name.map(error => (
-                          <div className="text-danger">{error}</div>
-                        ))}
+
+                      <form encType="multipart/form-data">
+                        <label htmlFor="image">
+                          Image
+                          <input
+                            type="file"
+                            name="image"
+                            id="image"
+                            className="form-control"
+                            onChange={handleImage}
+                            value={image}
+                            accept="image/*"
+                          />
+                        </label>
+                        {serverErrors.image &&
+                          serverErrors.image.map(error => (
+                            <div className="text-danger">{error}</div>
+                          ))}
+                      </form>
                     </Grid>
                   </Grid>
 
                   <Grid container>
-                    <Grid xs={3} />
+                    <Grid item xs={3} />
                     <Grid item xs={3}>
                       <Link to="/categories" title="Categories">
                         <IconButton aria-label="Delete" size="small">

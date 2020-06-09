@@ -21,7 +21,7 @@ export const usersUrl = baseUrl + 'admin/users/';
 
 export const walletUrl = baseUrl + 'wallet/';
 export const depositsUrl = baseUrl + 'admin/deposits/';
-export const transactionsUrl = baseUrl + 'transactions/';
+export const transactionsUrl = baseUrl + 'admin/transactions/';
 
 // project resources endpoints
 export const customUsersUrl = baseUrl + 'users/';
@@ -90,7 +90,7 @@ export const protectOwnerRoute = props => {
 export const errorToast = (toast, message, error, props) => {
   if (error.response) {
     if (error.response.status === 401) {
-      toast.error('Session Expired, Login Again', {
+      toast.info('Session Expired, Login Again', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: true,

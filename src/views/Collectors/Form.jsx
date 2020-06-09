@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from 'layouts';
@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 // Material helpers
+import styles from './styles';
 import { withStyles } from '@material-ui/core';
 
 // Material components
@@ -28,10 +29,14 @@ import IconButton from '@material-ui/core/IconButton';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
 // Shared components
-import { Portlet, PortletLabel, PortletContent } from 'components';
+import {
+  Portlet,
+  PortletLabel,
+  PortletContent,
+  PortletToolbar
+} from 'components';
 
 // Component styles
-import styles from './styles';
 import axios from 'axios';
 import {
   getHeaders,
@@ -140,155 +145,160 @@ const CollectorForm = props => {
     getIdTypes();
   }, []);
 
-  const classes = props;
-  const { className } = props;
+  const { className, classes } = props;
 
   const rootClassName = classNames(classes.root, className);
 
   return (
     <DashboardLayout title={`Collector Form`}>
-      <div className={classes.root}>
-        <Grid container spacing={4} className="mt-10">
-          <Grid item lg={2} md={2} xl={2}>
-            <div />
-          </Grid>
-          <Grid item lg={8} md={8} xl={8} xs={12}>
+      <Grid>
+        <div className="row">
+          <div className="col-md-8 offset-md-2 mt-5">
             <Portlet className={rootClassName}>
               <PortletContent>
-                <Grid item lg={2} md={2} />
-                <Grid item lg={8} md={8}>
-                  <form autoComplete="off" noValidate>
-                    <h4 className="text-center text-primary">
-                      Add Collector <br />
+                <div className="row">
+                  <div className="col-md-4 offset-md-2">
+                    <PortletLabel subtitle="" title="Add Collector" />
+                  </div>
+                  <div className="col-md-4 text-primary">
+                    <PortletToolbar>
                       Default password is <i>pass1234</i>
-                    </h4>
-                    <TextField
-                      className={''}
-                      label="Full Name"
-                      margin="dense"
-                      required
-                      variant="outlined"
-                      name="name"
-                      onChange={handleName}
-                      value={name}
-                    />
-                    {serverErrors.name &&
-                      serverErrors.name.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
-                    <br />
+                    </PortletToolbar>
+                  </div>
+                </div>
 
-                    <TextField
-                      className={''}
-                      label="Username"
-                      margin="dense"
-                      required
-                      variant="outlined"
-                      name="username"
-                      onChange={handleUsername}
-                      value={username}
-                    />
-                    {serverErrors.username &&
-                      serverErrors.username.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
-                    <br />
+                <div className="row">
+                  <div className="col-md-8 offset-2">
+                    <form autoComplete="off" noValidate>
+                      <TextField
+                        className={classes.textField}
+                        label="Full Name"
+                        margin="dense"
+                        required
+                        variant="outlined"
+                        name="name"
+                        onChange={handleName}
+                        value={name}
+                      />
+                      {serverErrors.name &&
+                        serverErrors.name.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
+                      <br />
 
-                    <TextField
-                      className={''}
-                      label="Email"
-                      margin="dense"
-                      required
-                      variant="outlined"
-                      name="email"
-                      onChange={handleEmail}
-                      value={email}
-                    />
-                    {serverErrors.email &&
-                      serverErrors.email.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
+                      <TextField
+                        className={classes.textField}
+                        label="Username"
+                        margin="dense"
+                        required
+                        variant="outlined"
+                        name="username"
+                        onChange={handleUsername}
+                        value={username}
+                      />
+                      {serverErrors.username &&
+                        serverErrors.username.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
+                      <br />
 
-                    <br />
+                      <TextField
+                        className={classes.textField}
+                        label="Email"
+                        margin="dense"
+                        required
+                        variant="outlined"
+                        name="email"
+                        onChange={handleEmail}
+                        value={email}
+                      />
+                      {serverErrors.email &&
+                        serverErrors.email.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
 
-                    <TextField
-                      className={''}
-                      label="Phone"
-                      margin="dense"
-                      required
-                      variant="outlined"
-                      name="phone"
-                      onChange={handlePhone}
-                      value={phone}
-                    />
-                    {serverErrors.phone &&
-                      serverErrors.phone.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
-                    <br />
+                      <br />
 
-                    <TextField
-                      className={''}
-                      label="National ID Number"
-                      margin="dense"
-                      required
-                      variant="outlined"
-                      name="nationalId"
-                      onChange={handleId}
-                      value={nationalId}
-                    />
-                    {serverErrors.national_id &&
-                      serverErrors.national_id.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
-                    <br />
+                      <TextField
+                        className={classes.textField}
+                        label="Phone"
+                        margin="dense"
+                        required
+                        variant="outlined"
+                        name="phone"
+                        onChange={handlePhone}
+                        value={phone}
+                      />
+                      {serverErrors.phone &&
+                        serverErrors.phone.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
+                      <br />
 
-                    <InputLabel id="national-id-type">ID Type</InputLabel>
-                    <Select
-                      labelId="national-id-type"
-                      value={nationalIdType}
-                      onChange={handleIdType}>
-                      {idTypes.map(idtype => (
-                        <MenuItem value={idtype.id} key={idtype.id}>
-                          {idtype.title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {serverErrors.national_id_type &&
-                      serverErrors.national_id_type.map(error => (
-                        <div className="text-danger">{error}</div>
-                      ))}
+                      <TextField
+                        className={classes.textField}
+                        label="National ID Number"
+                        margin="dense"
+                        required
+                        variant="outlined"
+                        name="nationalId"
+                        onChange={handleId}
+                        value={nationalId}
+                      />
+                      {serverErrors.national_id &&
+                        serverErrors.national_id.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
+                      <br />
 
-                    <Grid container spacing={4}>
-                      <Grid item lg={2} md={2} xs={2} />
-                      <Grid item lg={3} md={3} xs={3}>
-                        <Link to="/collectors">
-                          <IconButton aria-label="Delete" size="small">
-                            <ArrowBackIcon fontSize="inherit" />
-                          </IconButton>
-                        </Link>
-                      </Grid>
-                      <Grid item lg={2} md={2} xs={2} />
-                      <Grid item lg={3} md={3} xs={3}>
-                        {isLoading ? (
-                          <CircularProgress className={classes.progress} />
-                        ) : (
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={createCollector}>
-                            <SaveIcon /> Save
-                          </Button>
-                        )}
-                      </Grid>
-                    </Grid>
-                  </form>
-                </Grid>
+                      <InputLabel id="national-id-type">ID Type</InputLabel>
+                      <Select
+                        value={nationalIdType}
+                        onChange={handleIdType}
+                        name="national-id-type"
+                        id="national-id-type">
+                        {idTypes.map(idtype => (
+                          <MenuItem value={idtype.id} key={idtype.id}>
+                            {idtype.title}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {serverErrors.national_id_type &&
+                        serverErrors.national_id_type.map(error => (
+                          <div className="text-danger">{error}</div>
+                        ))}
+
+                      <div className="row mt-3">
+                        <div className="col-md-4">
+                          <Link to="/collectors">
+                            <IconButton aria-label="Delete" size="small">
+                              <ArrowBackIcon fontSize="inherit" />
+                            </IconButton>
+                          </Link>
+                        </div>
+                        <div className="col-md-4" />
+
+                        <div className="col-md-4">
+                          {isLoading ? (
+                            <CircularProgress className={classes.progress} />
+                          ) : (
+                            <Button
+                              color="primary"
+                              variant="contained"
+                              onClick={createCollector}>
+                              <SaveIcon /> Save
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </PortletContent>
             </Portlet>
-          </Grid>
-        </Grid>
-      </div>
+          </div>
+        </div>
+      </Grid>
     </DashboardLayout>
   );
 };

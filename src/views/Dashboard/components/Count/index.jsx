@@ -27,7 +27,7 @@ class Profit extends Component {
     const rootClassName = classNames(classes.root, className);
 
     return (
-      <Paper {...rest} className={rootClassName}>
+      <Paper {...rest} className={rootClassName} elevation={6}>
         <div className={classes.content}>
           <div className={classes.details}>
             <Typography className={classes.title} variant="body2">

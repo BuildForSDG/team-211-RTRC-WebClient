@@ -19,6 +19,11 @@ import Locations from '../Locations';
 import LocationForm from '../Locations/Form';
 import LocationDetail from '../Locations/Detail';
 
+import Wallet from '../Wallet';
+import Deposits from '../Deposits';
+import Transactions from '../Transactions';
+import Drivers from '../Drivers';
+
 import Icons from '../Icons';
 import Account from '../Account';
 import Settings from '../Settings';
@@ -33,7 +38,11 @@ class Routes extends Component {
       <Switch>
         <Redirect exact from="/" to="/dashboard" />
         <Route component={Dashboard} exact path="/dashboard" />
+        <Route component={Wallet} exact path="/wallet" />
+        <Route component={Deposits} exact path="/deposits" />
+        <Route component={Transactions} exact path="/transactions" />
         <Route component={Vehicles} exact path="/vehicles" />
+        <Route component={Drivers} exact path="/drivers" />
         <Route component={VehicleForm} exact path="/vehicles/add-new" />
         <Route component={VehicleDetails} exact path="/vehicles/:vehicle_id" />
         <Route component={Categories} exact path="/categories" />
