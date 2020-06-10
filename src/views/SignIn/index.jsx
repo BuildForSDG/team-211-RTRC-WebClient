@@ -145,47 +145,26 @@ class SignIn extends Component {
 
     return (
       <div className={classes.root}>
-        <Grid
-          className={classes.grid}
-          container
-        >
-          <Grid
-            className={classes.quoteWrapper}
-            item
-            lg={5}
-          >
+        <Grid className={classes.grid} container>
+          <Grid className={classes.quoteWrapper} item lg={5}>
             <div className={classes.quote}>
               <div className={classes.quoteInner}>
-                <Typography
-                  className={classes.quoteText}
-                  variant="h1"
-                >
+                <Typography className={classes.quoteText} variant="h1">
                   <b>E-REVENUE</b>
                 </Typography>
                 <div className={classes.person}>
-                  <Typography
-                    className={classes.name}
-                    variant="body1"
-                  >
+                  <Typography className={classes.name} variant="body1">
                     toll collection innovatively...
                   </Typography>
                 </div>
               </div>
             </div>
           </Grid>
-          <Grid
-            className={classes.content}
-            item
-            lg={7}
-            xs={12}
-          >
+          <Grid className={classes.content} item lg={7} xs={12}>
             <div className={classes.content}>
               <div className={classes.contentBody}>
                 <form className={classes.form}>
-                  <Typography
-                    className={classes.title}
-                    variant="h2"
-                  >
+                  <Typography className={classes.title} variant="h2">
                     Sign in
                   </Typography>
                   <div className={classes.fields}>
@@ -203,8 +182,7 @@ class SignIn extends Component {
                     {showEmailError && (
                       <Typography
                         className={classes.fieldError}
-                        variant="body2"
-                      >
+                        variant="body2">
                         {errors.email[0]}
                       </Typography>
                     )}
@@ -222,8 +200,7 @@ class SignIn extends Component {
                     {showPasswordError && (
                       <Typography
                         className={classes.fieldError}
-                        variant="body2"
-                      >
+                        variant="body2">
                         {errors.password[0]}
                       </Typography>
                     )}
@@ -233,18 +210,14 @@ class SignIn extends Component {
                       return (
                         <Typography
                           className={classes.fieldError}
-                          variant="body2"
-                        >
+                          variant="body2">
                           {err}
                         </Typography>
                       );
                     })}
 
                   {submitError && (
-                    <Typography
-                      className={classes.submitError}
-                      variant="body2"
-                    >
+                    <Typography className={classes.submitError} variant="body2">
                       {submitError}
                     </Typography>
                   )}
@@ -257,12 +230,11 @@ class SignIn extends Component {
                       disabled={!isValid}
                       onClick={this.login}
                       size="large"
-                      variant="contained"
-                    >
+                      variant="contained">
                       Sign in now
                     </Button>
                   )}
-                  <Typography
+                  {/* <Typography
                     className={classes.signUp}
                     variant="body1"
                   >
@@ -273,7 +245,7 @@ class SignIn extends Component {
                     >
                       Sign up
                     </Link>
-                  </Typography>
+                  </Typography> */}
                 </form>
               </div>
             </div>
