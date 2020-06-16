@@ -32,6 +32,8 @@ import SignIn from '../SignIn';
 import UnderDevelopment from '../UnderDevelopment';
 import NotFound from '../NotFound';
 
+import Payments from '../Payments';
+
 class Routes extends Component {
   render() {
     return (
@@ -40,6 +42,7 @@ class Routes extends Component {
         <Route component={Dashboard} exact path="/dashboard" />
         <Route component={Wallet} exact path="/wallet" />
         <Route component={Deposits} exact path="/deposits" />
+        <Route component={Payments} exact path="/payments/:token/:email" />
         <Route component={Transactions} exact path="/transactions" />
         <Route component={Vehicles} exact path="/vehicles" />
         <Route component={Drivers} exact path="/drivers" />

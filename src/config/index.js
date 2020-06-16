@@ -22,6 +22,7 @@ export const usersUrl = baseUrl + 'admin/users/';
 export const walletUrl = baseUrl + 'wallet/';
 export const depositsUrl = baseUrl + 'admin/deposits/';
 export const transactionsUrl = baseUrl + 'admin/transactions/';
+export const paymentsUrl = baseUrl + 'deposits/';
 
 // project resources endpoints
 export const customUsersUrl = baseUrl + 'users/';
