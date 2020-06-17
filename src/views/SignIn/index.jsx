@@ -106,8 +106,15 @@ class SignIn extends Component {
         this.setState({ isLoading: false });
         this.props.setUser({ type: 'SET_USER', payload: authUser });
 
-        successToast(toast, 'Login Successful!');
-        history.push('/dashboard');
+        if (res.data.user.is_staff) {
+          successToast(toast, 'Login Successful!');
+          history.push('/dashboard');
+        } else {
+          localStorage.removeItem('authUser');
+          this.setState({
+            serverErrors: { non_field_errors: ['You are not an admin.'] }
+          });
+        }
       })
       .catch(err => {
         if (err.response) {
