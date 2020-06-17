@@ -47,9 +47,13 @@ class Sidebar extends Component {
     return (
       <nav className={rootClassName}>
         <div className={classes.logoWrapper}>
-          <Link className={classes.logoLink} to="/">
-            <img alt="E-Revenue logo" className={classes.logoImage} src="" />
-          </Link>
+          {/* <Link className={classes.logoLink} to="/">
+            <img
+              alt="E-Revenue logo"
+              className={classes.logoImage}
+              src="/images/logo2.jpg"
+            />
+          </Link> */}
         </div>
         <Divider className={classes.logoDivider} />
         <div className={classes.profile}>
