@@ -6,6 +6,8 @@ import servicesReducer from './services';
 import mapsReducer from './maps';
 import settingsReducer from './settings';
 import vehiclesReducer from './vehicles';
+import tollsReducer from './tolls';
+import paymentsReducer from './payments';
 
 const store = createStore(
   combineReducers({
@@ -13,7 +15,9 @@ const store = createStore(
     servicesReducer,
     mapsReducer,
     settingsReducer,
-    vehiclesReducer
+    vehiclesReducer,
+    tollsReducer,
+    paymentsReducer
   }),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

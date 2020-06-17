@@ -26,7 +26,7 @@ import {
   PeopleOutlined as PeopleIcon,
   // ShoppingBasketOutlined as ShoppingBasketIcon,
   // LockOpenOutlined as LockOpenIcon,
-  TextFields as TextFieldsIcon,
+  SignalWifi4BarLockTwoTone,
   DirectionsCar as DirectionsCarIcon,
   // ImageOutlined as ImageIcon,
   InfoOutlined as InfoIcon,
@@ -47,15 +47,8 @@ class Sidebar extends Component {
     return (
       <nav className={rootClassName}>
         <div className={classes.logoWrapper}>
-          <Link
-            className={classes.logoLink}
-            to="/"
-          >
-            <img
-              alt="E-Revenue logo"
-              className={classes.logoImage}
-              src=""
-            />
+          <Link className={classes.logoLink} to="/">
+            <img alt="E-Revenue logo" className={classes.logoImage} src="" />
           </Link>
         </div>
         <Divider className={classes.logoDivider} />
@@ -67,14 +60,8 @@ class Sidebar extends Component {
               src="/images/avatars/avatar_1.png"
             />
           </Link> */}
-          <Typography
-            className={classes.nameText}
-            variant="h6"
-          >
-            <Link
-              title="Account Settings"
-              to="/settings"
-            >
+          <Typography className={classes.nameText} variant="h6">
+            <Link title="Account Settings" to="/settings">
               <SettingsIcon /> {` ${username.toUpperCase()}`}
             </Link>
           </Typography>
@@ -83,16 +70,12 @@ class Sidebar extends Component {
           </Typography> */}
         </div>
         <Divider className={classes.profileDivider} />
-        <List
-          component="div"
-          disablePadding
-        >
+        <List component="div" disablePadding>
           <ListItem
             activeClassName={classes.activeListItem}
             className={classes.listItem}
             component={NavLink}
-            to="/dashboard"
-          >
+            to="/dashboard">
             <ListItemIcon className={classes.listItemIcon}>
               <DashboardIcon />
             </ListItemIcon>
@@ -102,7 +85,7 @@ class Sidebar extends Component {
             />
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             activeClassName={classes.activeListItem}
             className={classes.listItem}
             component={NavLink}
@@ -115,31 +98,59 @@ class Sidebar extends Component {
               classes={{ primary: classes.listItemText }}
               primary="Vehicles"
             />
-          </ListItem>
+          </ListItem> */}
 
           {is_staff && (
-            <ListItem
-              activeClassName={classes.activeListItem}
-              className={classes.listItem}
-              component={NavLink}
-              to="/users"
-            >
-              <ListItemIcon className={classes.listItemIcon}>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText
-                classes={{ primary: classes.listItemText }}
-                primary="Account Managers"
-              />
-            </ListItem>
+            <>
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/categories">
+                <ListItemIcon className={classes.listItemIcon}>
+                  <DirectionsCarIcon />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Vehicle Categories"
+                />
+              </ListItem>
+
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/collectors">
+                <ListItemIcon className={classes.listItemIcon}>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Toll Collectors"
+                />
+              </ListItem>
+
+              <ListItem
+                activeClassName={classes.activeListItem}
+                className={classes.listItem}
+                component={NavLink}
+                to="/locations">
+                <ListItemIcon className={classes.listItemIcon}>
+                  <SignalWifi4BarLockTwoTone />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.listItemText }}
+                  primary="Toll Locations"
+                />
+              </ListItem>
+            </>
           )}
 
           <ListItem
             activeClassName={classes.activeListItem}
             className={classes.listItem}
             component={NavLink}
-            to="/settings"
-          >
+            to="/settings">
             <ListItemIcon className={classes.listItemIcon}>
               <SettingsIcon />
             </ListItemIcon>
@@ -236,13 +247,11 @@ class Sidebar extends Component {
             <ListSubheader className={classes.listSubheader}>
               Support
             </ListSubheader>
-          }
-        >
+          }>
           <ListItem
             className={classes.listItem}
             component="a"
-            href="mailto:support@e-revenue.com"
-          >
+            href="mailto:support@toll-revenue.digital">
             <ListItemIcon className={classes.listItemIcon}>
               <InfoIcon />
             </ListItemIcon>

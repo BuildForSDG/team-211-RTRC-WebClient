@@ -39,23 +39,16 @@ class Settings extends Component {
     return (
       <DashboardLayout title="Settings">
         <div className={classes.root}>
-          <Grid
-            container
-            spacing={4}
-          >
-            <Grid md={1} />
-            <Grid
+          <Grid container spacing={4}>
+            <Grid item md={3} />
+            {/* <Grid
               item
               md={5}
               xs={12}
             >
               <Account />
-            </Grid>
-            <Grid
-              item
-              md={5}
-              xs={12}
-            >
+            </Grid> */}
+            <Grid item md={6} xs={12}>
               <Password />
             </Grid>
           </Grid>

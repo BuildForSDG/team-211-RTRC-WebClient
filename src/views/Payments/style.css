@@ -1,0 +1,12 @@
+button {
+  color: dodgerblue;
+  padding: 5px;
+  background-color: white;
+  border-radius: 5px;
+  border-color: dodgerblue;
+}
+
+button:hover {
+  color: white;
+  background-color: dodgerblue;
+}
