@@ -138,6 +138,7 @@ const Drivers = props => {
                               {driv.email}
                             </TableCell>
                             <TableCell>{driv.phone}</TableCell>
+                            <TableCell>{driv.vehicles}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
