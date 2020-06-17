@@ -137,7 +137,7 @@ const Drivers = props => {
                             <TableCell className={classes.customerCell}>
                               {driv.email}
                             </TableCell>
-                            <TableCell>{0}</TableCell>
+                            <TableCell>{driv.phone}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
