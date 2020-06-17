@@ -65,13 +65,9 @@ const CategoryForm = props => {
   };
 
   const handleImage = e => {
-    const file = e.target.files[0];
+    setImage(e.target.files[0]);
     // this.profile_picture = URL.createObjectURL(file);
     // this.image_file = file;
-
-    const form_data = new FormData();
-    form_data.append('image', file);
-    setImage(form_data);
   };
 
   // create new vehicle
@@ -80,8 +76,8 @@ const CategoryForm = props => {
     setIsLoading(true);
 
     let payload = new FormData();
-    payload.append('name', JSON.stringify(name));
-    payload.append('toll_fee', JSON.stringify(tollFee));
+    payload.append('name', name);
+    payload.append('toll_fee', tollFee);
     payload.append('image', image);
 
     axios
@@ -159,8 +155,7 @@ const CategoryForm = props => {
                             name="image"
                             id="image"
                             className="form-control"
-                            onChange={handleImage}
-                            value={image}
+                            onChange={e => handleImage(e)}
                             accept="image/*"
                           />
                         </label>

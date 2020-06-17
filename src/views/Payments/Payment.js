@@ -63,7 +63,7 @@ const Payment = props => {
   return (
     <p>
       <PaystackButton
-        text="Make Payment"
+        text="Proceed"
         class="payButton"
         callback={callback}
         close={close}

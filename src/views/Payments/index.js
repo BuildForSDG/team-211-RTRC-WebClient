@@ -29,42 +29,57 @@ const Payments = props => {
   }, []);
 
   return (
-    <Grid container spacing={4}>
-      {/* <Grid item lg={6} md={6} xl={6}>
-            <SalesChart />
-          </Grid> */}
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={10} />
-      </Grid>
+    <div className="mt-5">
+      <Grid container spacing={4}>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={10} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={20} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={20} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={50} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={50} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={100} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={100} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={200} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={200} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={300} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={300} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={400} />
-      </Grid>
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={400} />
+        </Grid>
+        <Grid item xs={1} />
 
-      <Grid item lg={3} md={3} xl={3}>
-        <PaymentCard amount={500} />
+        <Grid item xs={1} />
+        <Grid item lg={3} md={3} xl={3} xs={10}>
+          <PaymentCard amount={500} />
+        </Grid>
+        <Grid item xs={1} />
       </Grid>
-    </Grid>
+    </div>
   );
 };
 
