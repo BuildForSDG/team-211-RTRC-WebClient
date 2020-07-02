@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 
 // Material helpers
 import { withStyles, Grid } from '@material-ui/core';
+import { Add as AddIcon } from '@material-ui/icons';
 
 // Material components
 import {
-  Button,
   CircularProgress,
   Table,
   TableHead,
@@ -89,14 +89,10 @@ const Category = props => {
                   title="Vehicle Categories"
                 />
                 <PortletToolbar>
-                  <Link to="/categories/add-new">
-                    <Button
-                      className={classes.newEntryButton}
-                      color="primary"
-                      size="small"
-                      variant="outlined">
-                      Add New
-                    </Button>
+                  <Link
+                    to="/categories/add-new"
+                    className="btn btn-outline-primary">
+                    Add New <AddIcon />
                   </Link>
                 </PortletToolbar>
               </PortletHeader>

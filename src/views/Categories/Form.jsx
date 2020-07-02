@@ -112,7 +112,11 @@ const CategoryForm = props => {
           <Grid item lg={8} md={8} xl={8} xs={12}>
             <Portlet className={rootClassName}>
               <PortletContent>
-                <PortletLabel subtitle="" title="Add Category" />
+                <div className="row">
+                  <div className="col-md-2 offset-md-3">
+                    <PortletLabel subtitle="" title="Add Category" />
+                  </div>
+                </div>
                 <form autoComplete="off" noValidate>
                   <Grid container>
                     <Grid item md={3} />
@@ -147,22 +151,25 @@ const CategoryForm = props => {
                           <div className="text-danger">{error}</div>
                         ))}
 
-                      <form encType="multipart/form-data">
-                        <label htmlFor="image">
-                          Image
-                          <input
-                            type="file"
-                            name="image"
-                            id="image"
-                            className="form-control"
-                            onChange={e => handleImage(e)}
-                            accept="image/*"
-                          />
-                        </label>
-                        {serverErrors.image &&
-                          serverErrors.image.map(error => (
-                            <div className="text-danger">{error}</div>
-                          ))}
+                      <form encType="multipart/form-data" className="mb-3 mt-2">
+                        <div className="row">
+                          <div className="col-md-12">
+                            <input
+                              type="file"
+                              name="image"
+                              id="image"
+                              className="form-control"
+                              placeholder="choose image file"
+                              onChange={e => handleImage(e)}
+                              accept="image/*"
+                            />
+
+                            {serverErrors.image &&
+                              serverErrors.image.map(error => (
+                                <div className="text-danger">{error}</div>
+                              ))}
+                          </div>
+                        </div>
                       </form>
                     </Grid>
                   </Grid>
@@ -170,10 +177,10 @@ const CategoryForm = props => {
                   <Grid container>
                     <Grid item xs={3} />
                     <Grid item xs={3}>
-                      <Link to="/categories" title="Categories">
-                        <IconButton aria-label="Delete" size="small">
-                          <ArrowBackIcon fontSize="inherit" />
-                        </IconButton>
+                      <Link
+                        to="/categories"
+                        className="btn btn-outline-primary">
+                        <ArrowBackIcon />
                       </Link>
                     </Grid>
                     <Grid item xs={1} />

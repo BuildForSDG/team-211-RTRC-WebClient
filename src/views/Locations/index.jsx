@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 // Material helpers
 import { withStyles, Grid } from '@material-ui/core';
+import { Add as AddIcon } from '@material-ui/icons';
 
 // Material components
 import {
@@ -89,14 +90,10 @@ const Location = props => {
                   title="Toll Locations"
                 />
                 <PortletToolbar>
-                  <Link to="/locations/add-new">
-                    <Button
-                      className={classes.newEntryButton}
-                      color="primary"
-                      size="small"
-                      variant="outlined">
-                      Add New
-                    </Button>
+                  <Link
+                    to="/locations/add-new"
+                    className="btn btn-outline-primary">
+                    Add New <AddIcon />
                   </Link>
                 </PortletToolbar>
               </PortletHeader>

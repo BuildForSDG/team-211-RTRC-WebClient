@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 // Material helpers
 import { withStyles } from '@material-ui/core';
+import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
 // Material components
 import {
@@ -97,14 +98,8 @@ const Drivers = props => {
                   title="Drivers"
                 />
                 <PortletToolbar>
-                  <Link to="/">
-                    <Button
-                      className={classes.newEntryButton}
-                      color="primary"
-                      size="small"
-                      variant="outlined">
-                      Dashboard
-                    </Button>
+                  <Link to="/" className="btn btn-outline-primary">
+                    <ArrowBackIcon /> Dashboard
                   </Link>
                 </PortletToolbar>
               </PortletHeader>

@@ -197,11 +197,11 @@ const CategoryDetail = props => {
                 <DialogActions>
                   <Grid container spacing={4}>
                     <Grid item xs={6}>
-                      <Button
-                        onClick={() => setOpenDeleteDialog(false)}
-                        color="primary">
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={() => setOpenDeleteDialog(false)}>
                         Cancel
-                      </Button>
+                      </button>
                     </Grid>
                     <Grid item xs={6}>
                       {isLoading ? (
@@ -268,12 +268,12 @@ const CategoryDetail = props => {
                 </DialogContent>
                 <DialogActions>
                   <Grid container spacing={4}>
-                    <Grid item xs={6}>
-                      <Button
-                        onClick={() => setOpenUpdateDialog(false)}
-                        color="primary">
+                    <Grid item xs={3}>
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={() => setOpenUpdateDialog(false)}>
                         Cancel
-                      </Button>
+                      </button>
                     </Grid>
                     <Grid item xs={6}>
                       {isLoading ? (

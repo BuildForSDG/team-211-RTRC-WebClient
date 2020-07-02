@@ -14,15 +14,8 @@ import { toast } from 'react-toastify';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from 'layouts';
-import { Grid, TextField } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { ArrowBack as ArrowBackIcon, Edit, Delete } from '@material-ui/icons';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { CircularProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -99,7 +92,7 @@ const Wallet = props => {
                   </div>
 
                   <div className="row mt-3">
-                    <div className="col-md-2">
+                    <div className="col-md-6">
                       <Link to="/" className="btn btn-outline-primary">
                         <ArrowBackIcon /> Dashboard
                       </Link>

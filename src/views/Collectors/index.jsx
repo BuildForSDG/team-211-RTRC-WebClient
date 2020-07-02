@@ -20,6 +20,7 @@ import {
   TableRow,
   Grid
 } from '@material-ui/core';
+import { Add as AddIcon } from '@material-ui/icons';
 
 // Shared components
 import {
@@ -101,14 +102,10 @@ const Collectors = props => {
                   title="Collectors"
                 />
                 <PortletToolbar>
-                  <Link to="/collectors/add-new">
-                    <Button
-                      className={classes.newEntryButton}
-                      color="primary"
-                      size="small"
-                      variant="outlined">
-                      Add Collector
-                    </Button>
+                  <Link
+                    to="/collectors/add-new"
+                    className="btn btn-outline-primary">
+                    Add New <AddIcon />
                   </Link>
                 </PortletToolbar>
               </PortletHeader>
