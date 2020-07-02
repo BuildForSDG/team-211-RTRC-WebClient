@@ -40,7 +40,7 @@ import { connect } from 'react-redux';
 
 class Sidebar extends Component {
   render() {
-    const { classes, className, username, is_staff } = this.props;
+    const { classes, className, is_staff } = this.props;
 
     const rootClassName = classNames(classes.root, className);
 
@@ -55,7 +55,7 @@ class Sidebar extends Component {
             />
           </Link> */}
         </div>
-        <Divider className={classes.logoDivider} />
+
         <div className={classes.profile}>
           {/* <Link to="/account">
             <Avatar
@@ -64,11 +64,12 @@ class Sidebar extends Component {
               src="/images/avatars/avatar_1.png"
             />
           </Link> */}
-          <Typography className={classes.nameText} variant="h6">
+          {/* <Typography className={classes.nameText} variant="h6">
             <Link title="Account Settings" to="/settings">
-              <SettingsIcon /> {` ${username.toUpperCase()}`}
+              <SettingsIcon /> 
+              {` ${username.toUpperCase()}`}
             </Link>
-          </Typography>
+          </Typography> */}
           {/* <Typography className={classes.bioText} variant="caption">
             Brain Director
           </Typography> */}

@@ -155,14 +155,16 @@ const CollectorForm = props => {
         <div className="row">
           <div className="col-md-8 offset-md-2 mt-5">
             <Portlet className={rootClassName}>
-              <PortletContent>
+              <PortletContent className="mt-5">
                 <div className="row">
-                  <div className="col-md-4 offset-md-2">
+                  <div className="col-md-2 offset-md-2">
                     <PortletLabel subtitle="" title="Add Collector" />
                   </div>
-                  <div className="col-md-4 text-primary">
+                  <div className="col-md-4">
                     <PortletToolbar>
-                      Default password is <i>pass1234</i>
+                      <span className="badge badge-primary">
+                        Default password is <i>pass1234</i>
+                      </span>
                     </PortletToolbar>
                   </div>
                 </div>
@@ -250,33 +252,36 @@ const CollectorForm = props => {
                           <div className="text-danger">{error}</div>
                         ))}
                       <br />
-
-                      <InputLabel id="national-id-type">ID Type</InputLabel>
-                      <Select
-                        value={nationalIdType}
-                        onChange={handleIdType}
-                        name="national-id-type"
-                        id="national-id-type">
-                        {idTypes.map(idtype => (
-                          <MenuItem value={idtype.id} key={idtype.id}>
-                            {idtype.title}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                      {serverErrors.national_id_type &&
-                        serverErrors.national_id_type.map(error => (
-                          <div className="text-danger">{error}</div>
-                        ))}
+                      <div className="row">
+                        <div className="col-md-12">
+                          <InputLabel id="national-id-type">ID Type</InputLabel>
+                          <Select
+                            value={nationalIdType}
+                            onChange={handleIdType}
+                            name="national-id-type"
+                            id="national-id-type">
+                            {idTypes.map(idtype => (
+                              <MenuItem value={idtype.id} key={idtype.id}>
+                                {idtype.title}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          {serverErrors.national_id_type &&
+                            serverErrors.national_id_type.map(error => (
+                              <div className="text-danger">{error}</div>
+                            ))}
+                        </div>
+                      </div>
 
                       <div className="row mt-3">
                         <div className="col-md-4">
-                          <Link to="/collectors">
-                            <IconButton aria-label="Delete" size="small">
-                              <ArrowBackIcon fontSize="inherit" />
-                            </IconButton>
+                          <Link
+                            to="/collectors"
+                            className="btn btn-outline-primary">
+                            <ArrowBackIcon />
                           </Link>
                         </div>
-                        <div className="col-md-4" />
+                        <div className="col-md-3" />
 
                         <div className="col-md-4">
                           {isLoading ? (

@@ -20,7 +20,7 @@ import {
   TableRow,
   Grid
 } from '@material-ui/core';
-
+import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 // Shared components
 import {
   Portlet,
@@ -99,14 +99,8 @@ const Deposits = props => {
                   title="Deposits"
                 />
                 <PortletToolbar>
-                  <Link to="/">
-                    <Button
-                      className={classes.newEntryButton}
-                      color="primary"
-                      size="small"
-                      variant="outlined">
-                      Dashboard
-                    </Button>
+                  <Link to="/" className="btn btn-outline-primary">
+                    <ArrowBackIcon /> Dashboard
                   </Link>
                 </PortletToolbar>
               </PortletHeader>

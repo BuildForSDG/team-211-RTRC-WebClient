@@ -120,12 +120,11 @@ class Password extends Component {
           {isLoading ? (
             <CircularProgress className={classes.progress} />
           ) : (
-            <Button
-              color="primary"
-              variant="outlined"
+            <button
+              className="btn btn-outline-primary"
               onClick={this.handleSavePassword}>
               Update
-            </Button>
+            </button>
           )}
         </PortletFooter>
       </Portlet>

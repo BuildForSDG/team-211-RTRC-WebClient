@@ -101,8 +101,12 @@ const LocationForm = props => {
           </Grid>
           <Grid item lg={8} md={8} xl={8} xs={12}>
             <Portlet className={rootClassName}>
-              <PortletContent>
-                <PortletLabel subtitle="" title="Add Location" />
+              <PortletContent className="mt-5">
+                <div className="row">
+                  <div className="col-md-4 offset-md-3">
+                    <PortletLabel subtitle="" title="Add Location" />
+                  </div>
+                </div>
                 <form autoComplete="off" noValidate>
                   <Grid container>
                     <Grid item md={3} />
@@ -142,10 +146,8 @@ const LocationForm = props => {
                   <Grid container>
                     <Grid xs={3} />
                     <Grid item xs={3}>
-                      <Link to="/locations" title="Locations">
-                        <IconButton aria-label="Delete" size="small">
-                          <ArrowBackIcon fontSize="inherit" />
-                        </IconButton>
+                      <Link to="/locations" className="btn btn-outline-primary">
+                        <ArrowBackIcon />
                       </Link>
                     </Grid>
                     <Grid item xs={1} />

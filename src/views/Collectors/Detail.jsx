@@ -251,11 +251,11 @@ const CollectorDetail = props => {
                   <DialogActions>
                     <Grid container spacing={4}>
                       <Grid item xs={6}>
-                        <Button
-                          onClick={() => setOpenDeleteDialog(false)}
-                          color="primary">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => setOpenDeleteDialog(false)}>
                           Cancel
-                        </Button>
+                        </button>
                       </Grid>
                       <Grid item xs={6}>
                         {isLoading ? (
@@ -282,10 +282,14 @@ const CollectorDetail = props => {
                   onClose={() => setOpenUpdateDialog(false)}
                   aria-labelledby="form-dialog-title">
                   <DialogTitle id="form-dialog-title" className="text-danger">
-                    Update Collector
+                    <div className="row">
+                      <div className="col-md-5 offset-md-2">
+                        Update Collector
+                      </div>
+                    </div>
                   </DialogTitle>
                   <DialogContent>
-                    <Grid>
+                    <Grid container>
                       <Grid item lg={2} md={2} />
                       <Grid item lg={8} md={8}>
                         <TextField
@@ -352,13 +356,14 @@ const CollectorDetail = props => {
                     </Grid>
                   </DialogContent>
                   <DialogActions>
-                    <Grid container spacing={4}>
-                      <Grid item xs={6}>
-                        <Button
-                          onClick={() => setOpenUpdateDialog(false)}
-                          color="primary">
+                    <Grid container>
+                      <Grid item xs={2} />
+                      <Grid item xs={3}>
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => setOpenUpdateDialog(false)}>
                           Cancel
-                        </Button>
+                        </button>
                       </Grid>
                       <Grid item xs={6}>
                         {isLoading ? (
